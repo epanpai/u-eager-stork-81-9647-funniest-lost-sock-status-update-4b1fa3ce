@@ -65,6 +65,11 @@ if (!(LINE.length >= 1 && LINE.length <= 120)) {
 if (LINE.trim() === '' || LINE.includes('\n')) {
   throw new Error('entry violates the gate: blank or multi-line');
 }
+// No leading or trailing whitespace: the gate counts every character,
+// and a stray space would also break the byte-identical tie-break math.
+if (LINE !== LINE.trim()) {
+  throw new Error('entry violates the gate: leading/trailing whitespace');
+}
 
 mkdirSync(out, { recursive: true });
 const target = join(out, 'entry.txt');
